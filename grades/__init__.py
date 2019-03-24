@@ -1,6 +1,7 @@
 from flask import Flask
 
 from grades.web.healthcheck import app as healthcheck_app
+from grades.db import DATABASE
 
 
 class App:
@@ -23,3 +24,14 @@ class App:
 
 
 app = App().start()
+
+
+@app.before_request
+def before_request():
+    DATABASE.connect()
+
+
+@app.after_request
+def after_request(response):
+    DATABASE.close()
+    return response
