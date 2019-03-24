@@ -4,3 +4,4 @@ peewee==3.9.3
 python-dotenv==0.10.1
 psycopg2-binary==2.7.7
 pytest-env==0.6.2
+inflection==0.3.1

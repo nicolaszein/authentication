@@ -1,5 +1,9 @@
 import pytest
-from grades import app as GradesApp
+from grades import (
+    app as GradesApp,
+    MODELS
+)
+from grades.db import DATABASE
 
 
 @pytest.fixture(scope='function')
@@ -9,6 +13,7 @@ def app(request):
     context = app.app_context()
 
     def teardown():
+        DATABASE.drop_tables(MODELS)
         context.pop()
 
     request.addfinalizer(teardown)

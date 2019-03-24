@@ -1,8 +1,8 @@
 import urllib.parse as urlparse
 from dataclasses import dataclass
+from peewee import PostgresqlDatabase
 
 from grades.settings import DATABASE_URL
-from peewee import PostgresqlDatabase
 
 
 @dataclass
@@ -34,9 +34,11 @@ def parse_database_url(url):
 config = parse_database_url(DATABASE_URL)
 
 DATABASE = PostgresqlDatabase(
-    'grades',
+    config.name,
     user=config.user,
     password=config.password,
     host=config.host,
-    port=config.port
+    port=config.port,
+    autocommit=True,
+    autorollback=True
 )
