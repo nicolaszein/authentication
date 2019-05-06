@@ -1,6 +1,7 @@
 from flask import Flask
 
 from grades.web.healthcheck import app as healthcheck_app
+from grades.web.api.v1.authentication import app as users_app
 from grades.db import DATABASE
 
 from grades.models.authentication.user import User
@@ -27,6 +28,7 @@ class App:
 
     def __register_blueprints(self):
         self._app.register_blueprint(healthcheck_app)
+        self._app.register_blueprint(users_app)
 
     def __create_tables(self):
         DATABASE.connect()
