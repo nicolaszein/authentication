@@ -9,7 +9,7 @@ case "$COMMAND" in
     python runserver.py
     ;;
   test)
-    python -m pytest $2
+    python -m pytest ${*:2}
     ;;
   *)
     exec bash -c "$*"
