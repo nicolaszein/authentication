@@ -4,7 +4,8 @@ from authentication.handlers.sign_up import SignUp
 
 @patch('authentication.handlers.sign_up.AuthenticationService')
 @patch('authentication.handlers.sign_up.User.save')
-def test_sign_up(save_mock, auth_service_mock):
+@patch('authentication.handlers.sign_up.User.generate_activation')
+def test_sign_up(generate_activation_mock, save_mock, auth_service_mock):
     params = {
         'full_name': 'Foo Bar',
         'email': 'foo.bar@email.com',
@@ -18,4 +19,5 @@ def test_sign_up(save_mock, auth_service_mock):
     assert user.email == 'foo.bar@email.com'
     assert user.password == 'hashed_password'
     auth_service_mock.hash_password.assert_called_once_with(password='a-secret')
-    save_mock.call_count == 1
+    save_mock.assert_called_once_with(force_insert=True)
+    assert generate_activation_mock.call_count == 1
