@@ -1,4 +1,3 @@
-
 FROM python:3.7 as build
 
 ADD requirements.txt requirements.txt
