@@ -1,9 +1,9 @@
 import pytest
-from grades import (
+from authentication import (
     App,
     MODELS
 )
-from grades.db import DATABASE
+from authentication.db import DATABASE
 
 
 @pytest.fixture(scope='function')
