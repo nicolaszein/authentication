@@ -1,5 +1,5 @@
 import peewee
-from grades.models._shared import BaseModel
+from authentication.models._shared import BaseModel
 
 
 class User(BaseModel):

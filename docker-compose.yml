@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: 'web'
+    volumes:
+      - .:/app
+    environment:
+      RACK_ENV: "${RACK_ENV:-development}"
+      GENERATIVE_COUNT: "${GENERATIVE_COUNT:-1}"
+    ports:
+      - '3000:3000'
+    networks:
+      - default
+      - authentication
+
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:12.0
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ''
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/var/lib/postgresql
+
+volumes:
+  postgres:
+
+networks:
+  authentication:
+    external: true

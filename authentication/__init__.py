@@ -1,9 +1,9 @@
 from flask import Flask
 
-from grades.web.healthcheck import app as healthcheck_app
-from grades.db import DATABASE
+from authentication.web.healthcheck import app as healthcheck_app
+from authentication.db import DATABASE
 
-from grades.models.authentication.user import User
+from authentication.models.user import User
 
 
 MODELS = [User]

@@ -1,4 +1,4 @@
-from grades.services.authentication import Authentication
+from authentication.services.authentication import Authentication
 
 
 def test_authentication_generate_password():

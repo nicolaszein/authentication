@@ -2,7 +2,7 @@ import urllib.parse as urlparse
 from dataclasses import dataclass
 from peewee import PostgresqlDatabase
 
-from grades.settings import DATABASE_URL
+from authentication.settings import DATABASE_URL
 
 
 @dataclass

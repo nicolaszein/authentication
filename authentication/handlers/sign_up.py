@@ -1,6 +1,6 @@
-from grades.handlers._shared.base_handler import BaseHandler
-from grades.services.authentication import Authentication as AuthenticationService
-from grades.models.authentication.user import User
+from authentication.handlers._shared.base_handler import BaseHandler
+from authentication.services.authentication import Authentication as AuthenticationService
+from authentication.models.user import User
 
 
 class SignUp(BaseHandler):

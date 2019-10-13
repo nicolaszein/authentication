@@ -3,7 +3,7 @@ import datetime
 import uuid
 import inflection
 from playhouse.signals import Model
-from grades.db import DATABASE as db
+from authentication.db import DATABASE as db
 
 
 def define_table_name(model_class):

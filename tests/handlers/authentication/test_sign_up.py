@@ -1,9 +1,9 @@
 from unittest.mock import patch
-from grades.handlers.authentication.sign_up import SignUp
+from authentication.handlers.sign_up import SignUp
 
 
-@patch('grades.handlers.authentication.sign_up.AuthenticationService')
-@patch('grades.handlers.authentication.sign_up.User.save')
+@patch('authentication.handlers.sign_up.AuthenticationService')
+@patch('authentication.handlers.sign_up.User.save')
 def test_sign_up(save_mock, auth_service_mock):
     params = {
         'full_name': 'Foo Bar',

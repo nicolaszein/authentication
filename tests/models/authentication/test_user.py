@@ -1,5 +1,5 @@
 import datetime
-from grades.models.authentication.user import User
+from authentication.models.user import User
 
 
 def test_user_attributes():
