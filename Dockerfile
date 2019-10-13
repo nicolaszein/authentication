@@ -17,4 +17,4 @@ RUN pip3 install --editable .
 
 EXPOSE 3000
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["./docker/entrypoint.sh"]
