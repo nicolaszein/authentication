@@ -7,3 +7,4 @@ pytest-env==0.6.2
 inflection==0.3.1
 bcrypt==3.1.6
 pytest-mock==1.10.4
+marshmallow==3.2.1
