@@ -17,6 +17,7 @@ class SignUp(BaseHandler):
         user.full_name = params.get('full_name')
         user.email = params.get('email')
         user.password = hashed_password
+        user.generate_activation()
         user.save(force_insert=True)
 
         return user
