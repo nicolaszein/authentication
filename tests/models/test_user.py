@@ -1,6 +1,7 @@
 import datetime
+import pytest
 from unittest.mock import patch
-from authentication.models.user import User
+from authentication.models.user import User, ActivationExpiredError
 
 
 def test_user_attributes():
@@ -36,3 +37,23 @@ def test_generate_activation(secrets_mock):
 
     assert user.activation_token == 'token'
     assert user.activation_token_created_at
+
+
+def test_activate():
+    user = User(is_active=False)
+    user.generate_activation()
+
+    user.activate()
+
+    assert user.is_active
+    assert not user.activation_token
+    assert not user.activation_token_created_at
+
+
+def test_activate_expired():
+    expired_date = datetime.datetime.now() - datetime.timedelta(seconds=8000)
+    user = User(is_active=False)
+    user.activation_token_created_at = expired_date
+
+    with pytest.raises(ActivationExpiredError):
+        user.activate()
