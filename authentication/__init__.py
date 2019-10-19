@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from peewee import DoesNotExist
 
 from authentication.web.healthcheck import app as healthcheck_app
 from authentication.web.api import app as api_app
@@ -36,7 +37,7 @@ class App:
         self._app.register_blueprint(api_app)
 
     def __create_tables(self):
-        DATABASE.connect()
+        DATABASE.connect(reuse_if_open=True)
         DATABASE.create_tables(MODELS)
         DATABASE.close()
 
@@ -45,10 +46,14 @@ class App:
         def handle_validator_error(e):
             return jsonify(errors=e.errors), 400
 
+        @app.errorhandler(DoesNotExist)
+        def object_not_found(e):
+            return jsonify(errors='Resource not found'), 404
+
     def __register_hooks(self, app):
         @app.before_request
         def before_request():
-            DATABASE.connect()
+            DATABASE.connect(reuse_if_open=True)
 
         @app.after_request
         def after_request(response):
