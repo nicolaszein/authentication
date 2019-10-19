@@ -7,6 +7,7 @@ from authentication.web.api.exceptions import ValidatorError
 from authentication.db import DATABASE
 
 from authentication.models.user import User
+from authentication.handlers.sign_in import InvalidCredentialsError
 
 
 MODELS = [User]
@@ -49,6 +50,10 @@ class App:
         @app.errorhandler(DoesNotExist)
         def object_not_found(e):
             return jsonify(errors='Resource not found'), 404
+
+        @app.errorhandler(InvalidCredentialsError)
+        def invalid_credentials(e):
+            return jsonify(errors='Invalid Credentials'), 401
 
     def __register_hooks(self, app):
         @app.before_request

@@ -1,10 +1,18 @@
 from flask import Blueprint, request, jsonify
+
 from authentication.web.api.validators.sign_up_validator import SignUpValidator
 from authentication.web.api.validators.activate_user_validator import ActivateUserValidator
+from authentication.web.api.validators.sign_in_validator import SignInValidator
+
+from authentication.web.api.serializers.user_serializer import UserSerializer
+from authentication.web.api.serializers.sign_in_serializer import SignInSerializer
+
 from authentication.handlers.sign_up import SignUp
 from authentication.handlers.activate_user import ActivateUser
-from authentication.web.api.serializers.user_serializer import UserSerializer
+from authentication.handlers.sign_in import SignIn
+
 from authentication.models.user import ActivationExpiredError
+
 
 app = Blueprint('authentication', __name__)
 
@@ -34,3 +42,13 @@ def activate_user():
         return '', 204
     except ActivationExpiredError:
         return jsonify(errors={'activation_token': 'Token expired'}), 400
+
+
+@app.route(f'{ENDPOINT_PREFIX}/sign-in', methods=['POST'])
+def sign_in():
+    data = request.json
+
+    valid_data = SignInValidator().validate(data=data)
+    sign_in = SignIn().execute(**valid_data)
+
+    return jsonify(SignInSerializer().serialize(sign_in)), 200
