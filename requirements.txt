@@ -8,3 +8,5 @@ inflection==0.3.1
 bcrypt==3.1.6
 pytest-mock==1.10.4
 marshmallow==3.2.1
+PyJWT==1.7.1
+freezegun==0.3.12
