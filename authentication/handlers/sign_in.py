@@ -27,7 +27,7 @@ class SignIn(BaseHandler):
         if not self.__valid_password(user, password):
             raise InvalidCredentialsError(f'Wrong password for {email}')
 
-        user_dto = UserDto(id=user.id, full_name=user.full_name, email=user.email)
+        user_dto = UserDto(id=str(user.id), full_name=user.full_name, email=user.email)
 
         token = self.__token_service.generate_token(user=user_dto)
         refresh_token = self.__token_service.generate_refresh_token(user=user_dto)
@@ -40,4 +40,4 @@ class SignIn(BaseHandler):
         )
 
     def __valid_password(self, user, password):
-        return self.__authentication_service.validate_password(password, user.password)
+        return self.__authentication_service.validate_password(password, user.password.encode())

@@ -1,4 +1,4 @@
-from marshmallow import Schema, ValidationError
+from marshmallow import Schema, ValidationError, EXCLUDE
 
 from authentication.web.api.exceptions import ValidatorError
 
@@ -11,7 +11,7 @@ class BaseValidator(Schema):
 
     def validate(self, data):
         try:
-            return self.load(data)
+            return self.load(data, unknown=EXCLUDE)
         except ValidationError as e:
             raise ValidatorError(
                 message=f'Error on {self.class_name}',
