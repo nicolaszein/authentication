@@ -1,6 +1,13 @@
 import jwt
 import datetime
-from authentication.settings import JWT_SECRET_TOKEN, TOKEN_EXPIRATION_TIME
+from authentication.settings import (
+    JWT_SECRET_TOKEN, TOKEN_EXPIRATION_TIME,
+    REFRESH_TOKEN_EXPIRATION_TIME
+)
+
+
+class RefreshTokenExpiredError(Exception):
+    pass
 
 
 class Token:
@@ -12,7 +19,7 @@ class Token:
 
         token = cls.__build_token(data)
 
-        return token
+        return token.decode()
 
     @classmethod
     def generate_refresh_token(cls, user):
@@ -21,11 +28,19 @@ class Token:
 
         token = cls.__build_token(data)
 
-        return token
+        return token.decode()
 
     @staticmethod
     def validate_token(token):
         jwt.decode(token, JWT_SECRET_TOKEN, algorithms=['HS256'])
+
+    @classmethod
+    def validate_refresh_token(cls, refresh_token):
+        now = datetime.datetime.timestamp(datetime.datetime.now())
+        data = jwt.decode(refresh_token, JWT_SECRET_TOKEN, algorithms=['HS256'])
+
+        if now > cls.__refresh_token_expired_at(data['iat']):
+            raise RefreshTokenExpiredError(f'Refresh token expired')
 
     @classmethod
     def __build_claims_data(cls, expire_in=None):
@@ -49,3 +64,10 @@ class Token:
             JWT_SECRET_TOKEN,
             algorithm='HS256'
         )
+
+    @classmethod
+    def __refresh_token_expired_at(cls, iat):
+        created_at = datetime.datetime.fromtimestamp(iat)
+        expired_at = created_at + datetime.timedelta(seconds=REFRESH_TOKEN_EXPIRATION_TIME)
+
+        return datetime.datetime.timestamp(expired_at)
