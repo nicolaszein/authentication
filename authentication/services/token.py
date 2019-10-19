@@ -5,40 +5,47 @@ from authentication.settings import JWT_SECRET_TOKEN, TOKEN_EXPIRATION_TIME
 
 class Token:
 
-    @staticmethod
-    def generate_token(user):
-        now = datetime.datetime.now()
-        exp = now + datetime.timedelta(seconds=TOKEN_EXPIRATION_TIME)
-
-        claims_data = {
-            'exp': datetime.datetime.timestamp(exp),
-            'iat': datetime.datetime.timestamp(now),
-            'iss': 'authentication_svc'
-        }
+    @classmethod
+    def generate_token(cls, user, expire_in=TOKEN_EXPIRATION_TIME):
+        claims_data = cls.__build_claims_data(expire_in)
         data = {**claims_data, **user.to_dict()}
 
-        token = jwt.encode(
-            data,
-            JWT_SECRET_TOKEN,
-            algorithm='HS256'
-        )
+        token = cls.__build_token(data)
+
+        return token
+
+    @classmethod
+    def generate_refresh_token(cls, user):
+        claims_data = cls.__build_claims_data()
+        data = {**claims_data, **user.to_dict()}
+
+        token = cls.__build_token(data)
 
         return token
 
     @staticmethod
-    def generate_refresh_token(user):
+    def validate_token(token):
+        jwt.decode(token, JWT_SECRET_TOKEN, algorithms=['HS256'])
+
+    @classmethod
+    def __build_claims_data(cls, expire_in=None):
         now = datetime.datetime.now()
 
         claims_data = {
             'iat': datetime.datetime.timestamp(now),
             'iss': 'authentication_svc'
         }
-        data = {**claims_data, **user.to_dict()}
 
-        token = jwt.encode(
+        if expire_in:
+            exp = now + datetime.timedelta(seconds=expire_in)
+            claims_data['exp'] = datetime.datetime.timestamp(exp)
+
+        return claims_data
+
+    @classmethod
+    def __build_token(cls, data):
+        return jwt.encode(
             data,
             JWT_SECRET_TOKEN,
             algorithm='HS256'
         )
-
-        return token
