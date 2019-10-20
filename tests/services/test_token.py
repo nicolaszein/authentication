@@ -120,13 +120,14 @@ def test_validate_refresh_token(jwt_mock):
     iat = datetime.datetime.now()
     jwt_mock.decode.return_value = {'iat': datetime.datetime.timestamp(iat)}
 
-    Token.validate_refresh_token(token)
+    data = Token.validate_refresh_token(token)
 
     jwt_mock.decode.assert_called_once_with(
         token,
         JWT_SECRET_TOKEN,
         algorithms=['HS256']
     )
+    assert data['id'] == user.id
 
 
 def test_validate_expired_refresh_token():

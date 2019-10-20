@@ -1,15 +1,12 @@
 from peewee import DoesNotExist
 from authentication.settings import TOKEN_EXPIRATION_TIME
+from authentication.exceptions import InvalidCredentialsError
 from authentication.handlers._shared.base_handler import BaseHandler
 from authentication.services.authentication import Authentication as AuthenticationService
 from authentication.services.token import Token as TokenService
 from authentication.dtos.user import User as UserDto
 from authentication.dtos.sign_in import SignIn as SignInDto
 from authentication.models.user import User
-
-
-class InvalidCredentialsError(Exception):
-    pass
 
 
 class SignIn(BaseHandler):

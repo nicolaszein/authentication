@@ -2,7 +2,7 @@ import pytest
 from peewee import DoesNotExist
 from unittest.mock import patch
 from authentication.models.user import User
-from authentication.handlers.sign_in import SignIn, InvalidCredentialsError
+from authentication.exceptions import SignIn, InvalidCredentialsError
 
 
 @patch('authentication.handlers.sign_in.UserDto')
