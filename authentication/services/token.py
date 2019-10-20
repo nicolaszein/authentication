@@ -42,6 +42,8 @@ class Token:
         if now > cls.__refresh_token_expired_at(data['iat']):
             raise RefreshTokenExpiredError(f'Refresh token expired')
 
+        return data
+
     @classmethod
     def __build_claims_data(cls, expire_in=None):
         now = datetime.datetime.now()
