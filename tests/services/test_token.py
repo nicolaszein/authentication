@@ -127,7 +127,7 @@ def test_validate_refresh_token(jwt_mock):
         JWT_SECRET_TOKEN,
         algorithms=['HS256']
     )
-    assert data['id'] == user.id
+    assert data['iat']
 
 
 def test_validate_expired_refresh_token():

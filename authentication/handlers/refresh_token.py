@@ -18,7 +18,11 @@ class RefreshToken(BaseHandler):
         except InvalidSignatureError:
             raise InvalidCredentialsError(f'Invalid refresh_token')
 
-        user_dto = UserDto(**data)
+        user_dto = UserDto(
+            id=data['id'],
+            full_name=data['full_name'],
+            email=data['email']
+        )
 
         token = self.__token_service.generate_token(user=user_dto)
         refresh_token = self.__token_service.generate_refresh_token(user=user_dto)
