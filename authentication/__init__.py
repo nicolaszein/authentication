@@ -7,7 +7,7 @@ from authentication.web.api.exceptions import ValidatorError
 from authentication.db import DATABASE
 
 from authentication.models.user import User
-from authentication.handlers.sign_in import InvalidCredentialsError
+from authentication.exceptions import InvalidCredentialsError
 
 
 MODELS = [User]
