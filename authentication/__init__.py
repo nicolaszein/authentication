@@ -7,10 +7,11 @@ from authentication.web.api.exceptions import ValidatorError
 from authentication.db import DATABASE
 
 from authentication.models.user import User
+from authentication.models.session import Session
 from authentication.exceptions import InvalidCredentialsError
 
 
-MODELS = [User]
+MODELS = [User, Session]
 
 
 class App:
