@@ -3,12 +3,11 @@ from peewee import DoesNotExist
 
 from authentication.web.healthcheck import app as healthcheck_app
 from authentication.web.api import app as api_app
-from authentication.web.api.exceptions import ValidatorError
 from authentication.db import DATABASE
 
 from authentication.models.user import User
 from authentication.models.session import Session
-from authentication.exceptions import InvalidCredentialsError
+from authentication.exceptions import InvalidCredentialsError, ValidatorError
 
 
 MODELS = [User, Session]
