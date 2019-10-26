@@ -13,8 +13,6 @@ from authentication.handlers.activate_user import ActivateUser
 from authentication.handlers.sign_in import SignIn
 from authentication.handlers.refresh_token import RefreshToken
 
-from authentication.services.token import RefreshTokenExpiredError
-
 from authentication.models.user import ActivationExpiredError
 
 
@@ -64,9 +62,6 @@ def sign_in_refresh():
 
     valid_data = RefreshTokenValidator().validate(data=data)
 
-    try:
-        sign_in = RefreshToken().execute(**valid_data)
+    sign_in = RefreshToken().execute(**valid_data)
 
-        return jsonify(SignInSerializer().serialize(sign_in)), 200
-    except RefreshTokenExpiredError:
-        return jsonify(errors='Expired refresh token'), 401
+    return jsonify(SignInSerializer().serialize(sign_in)), 200
