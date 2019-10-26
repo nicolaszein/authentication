@@ -1,8 +1,9 @@
-from jwt.exceptions import InvalidSignatureError
+from peewee import DoesNotExist
 from authentication.settings import TOKEN_EXPIRATION_TIME
 from authentication.exceptions import InvalidCredentialsError
 from authentication.handlers._shared.base_handler import BaseHandler
 from authentication.services.token import Token as TokenService
+from authentication.models.session import Session
 from authentication.dtos.user import User as UserDto
 from authentication.dtos.sign_in import SignIn as SignInDto
 
@@ -14,22 +15,16 @@ class RefreshToken(BaseHandler):
 
     def execute(self, refresh_token):
         try:
-            data = self.__token_service.validate_refresh_token(refresh_token)
-        except InvalidSignatureError:
+            session = Session.get(Session.refresh_token == refresh_token)
+        except DoesNotExist:
             raise InvalidCredentialsError(f'Invalid refresh_token')
 
-        user_dto = UserDto(
-            id=data['id'],
-            full_name=data['full_name'],
-            email=data['email']
-        )
-
+        user_dto = UserDto.from_user_model(user=session.user)
         token = self.__token_service.generate_token(user=user_dto)
-        refresh_token = self.__token_service.generate_refresh_token(user=user_dto)
 
         return SignInDto(
             access_token=token,
-            refresh_token=refresh_token,
+            refresh_token=None,
             expires_in=TOKEN_EXPIRATION_TIME,
             token_type='Bearer'
         )
