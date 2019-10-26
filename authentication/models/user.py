@@ -1,13 +1,10 @@
 import peewee
 import datetime
 import secrets
+from authentication.exceptions import ActivationExpiredError
 from authentication.models._shared import BaseModel
 
 ACTIVATION_EXPIRE_TIME = 7200
-
-
-class ActivationExpiredError(Exception):
-    pass
 
 
 class User(BaseModel):

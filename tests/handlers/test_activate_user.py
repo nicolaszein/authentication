@@ -2,7 +2,8 @@ import pytest
 import datetime
 from peewee import DoesNotExist
 from unittest.mock import patch
-from authentication.models.user import User, ActivationExpiredError
+from authentication.exceptions import ActivationExpiredError
+from authentication.models.user import User
 from authentication.handlers.activate_user import ActivateUser
 
 

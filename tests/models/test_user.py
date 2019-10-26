@@ -1,7 +1,8 @@
 import datetime
 import pytest
 from unittest.mock import patch
-from authentication.models.user import User, ActivationExpiredError
+from authentication.exceptions import ActivationExpiredError
+from authentication.models.user import User
 
 
 def test_user_attributes():

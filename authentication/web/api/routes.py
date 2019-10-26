@@ -13,7 +13,7 @@ from authentication.handlers.activate_user import ActivateUser
 from authentication.handlers.sign_in import SignIn
 from authentication.handlers.refresh_token import RefreshToken
 
-from authentication.models.user import ActivationExpiredError
+from authentication.exceptions import ActivationExpiredError
 
 
 app = Blueprint('authentication', __name__)

@@ -1,6 +1,6 @@
 from marshmallow import Schema, ValidationError, EXCLUDE
 
-from authentication.web.api.exceptions import ValidatorError
+from authentication.exceptions import ValidatorError
 
 
 class BaseValidator(Schema):
