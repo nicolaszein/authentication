@@ -2,18 +2,20 @@ from dataclasses import dataclass
 
 
 @dataclass
-class User:
+class TokenData:
     id: str
     full_name: str
     email: str
-
-    @classmethod
-    def from_user_model(cls, user):
-        return cls(id=str(user.id), full_name=user.full_name, email=user.email)
+    session_id: str = None
 
     def to_dict(self):
-        return {
-            'id': self.id,
+        data = {
+            'id': str(self.id),
             'full_name': self.full_name,
             'email': self.email
         }
+
+        if self.session_id:
+            data['session_id'] = str(self.session_id)
+
+        return data

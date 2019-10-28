@@ -4,7 +4,7 @@ from authentication.exceptions import InvalidCredentialsError, UserNotActivatedE
 from authentication.handlers._shared.base_handler import BaseHandler
 from authentication.services.authentication import Authentication as AuthenticationService
 from authentication.services.token import Token as TokenService
-from authentication.dtos.user import User as UserDto
+from authentication.dtos.token_data import TokenData
 from authentication.dtos.sign_in import SignIn as SignInDto
 from authentication.models.user import User
 from authentication.models.session import Session
@@ -28,12 +28,18 @@ class SignIn(BaseHandler):
         if not self.__valid_password(user, password):
             raise InvalidCredentialsError(f'Wrong password for {email}')
 
-        user_dto = UserDto.from_user_model(user=user)
+        token_data = TokenData(
+            id=user.id,
+            full_name=user.full_name,
+            email=user.email
+        )
 
-        refresh_token = self.__token_service.generate_refresh_token(user=user_dto)
-        Session(user=user, refresh_token=refresh_token).save(force_insert=True)
+        refresh_token = self.__token_service.generate_refresh_token(token_data=token_data)
+        session = Session(user=user, refresh_token=refresh_token)
+        session.save(force_insert=True)
 
-        token = self.__token_service.generate_token(user=user_dto)
+        token_data.session_id = session.id
+        token = self.__token_service.generate_token(token_data=token_data)
 
         return SignInDto(
             access_token=token,

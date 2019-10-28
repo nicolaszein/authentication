@@ -5,9 +5,9 @@ from unittest.mock import patch
 from freezegun import freeze_time
 from authentication.settings import JWT_SECRET_TOKEN, TOKEN_EXPIRATION_TIME
 from authentication.services.token import Token
-from authentication.dtos.user import User
+from authentication.dtos.token_data import TokenData
 
-user_attributes = {
+token_data_attributes = {
     "id": "123",
     "full_name": "John",
     "email": "john@email.com"
@@ -17,7 +17,7 @@ user_attributes = {
 @freeze_time('2019-01-01 00:00:00')
 @patch('authentication.services.token.jwt')
 def test_generate_token(jwt_mock):
-    user = User(**user_attributes)
+    token_data = TokenData(**token_data_attributes)
     exp = datetime.datetime.now() + datetime.timedelta(seconds=TOKEN_EXPIRATION_TIME)
     iat = datetime.datetime.now()
     iss = 'authentication_svc'
@@ -26,9 +26,9 @@ def test_generate_token(jwt_mock):
         'iat': datetime.datetime.timestamp(iat),
         'iss': iss
     }
-    expected_payload = {**claims_data, **user.to_dict()}
+    expected_payload = {**claims_data, **token_data.to_dict()}
 
-    Token.generate_token(user)
+    Token.generate_token(token_data)
 
     jwt_mock.encode.assert_called_once_with(
         expected_payload,
@@ -40,16 +40,16 @@ def test_generate_token(jwt_mock):
 @freeze_time('2019-01-01 00:00:00')
 @patch('authentication.services.token.jwt')
 def test_generate_token_without_expire_in(jwt_mock):
-    user = User(**user_attributes)
+    token_data = TokenData(**token_data_attributes)
     iat = datetime.datetime.now()
     iss = 'authentication_svc'
     claims_data = {
         'iat': datetime.datetime.timestamp(iat),
         'iss': iss
     }
-    expected_payload = {**claims_data, **user.to_dict()}
+    expected_payload = {**claims_data, **token_data.to_dict()}
 
-    Token.generate_token(user, expire_in=None)
+    Token.generate_token(token_data, expire_in=None)
 
     jwt_mock.encode.assert_called_once_with(
         expected_payload,
@@ -61,16 +61,16 @@ def test_generate_token_without_expire_in(jwt_mock):
 @freeze_time('2019-01-01 00:00:00')
 @patch('authentication.services.token.jwt')
 def test_generate_refresh_token(jwt_mock):
-    user = User(**user_attributes)
+    token_data = TokenData(**token_data_attributes)
     iat = datetime.datetime.now()
     iss = 'authentication_svc'
     claims_data = {
         'iat': datetime.datetime.timestamp(iat),
         'iss': iss
     }
-    expected_payload = {**claims_data, **user.to_dict()}
+    expected_payload = {**claims_data, **token_data.to_dict()}
 
-    Token.generate_refresh_token(user)
+    Token.generate_refresh_token(token_data)
 
     jwt_mock.encode.assert_called_once_with(
         expected_payload,
@@ -81,8 +81,8 @@ def test_generate_refresh_token(jwt_mock):
 
 @patch('authentication.services.token.jwt')
 def test_validate_token(jwt_mock):
-    user = User(**user_attributes)
-    token = Token.generate_token(user)
+    token_data = TokenData(**token_data_attributes)
+    token = Token.generate_token(token_data)
 
     Token.validate_token(token)
 
@@ -94,9 +94,9 @@ def test_validate_token(jwt_mock):
 
 
 def test_validate_expired_token():
-    user = User(**user_attributes)
+    token_data = TokenData(**token_data_attributes)
     with freeze_time('2019-01-01 00:00:00'):
-        token = Token.generate_token(user)
+        token = Token.generate_token(token_data)
 
     with pytest.raises(jwt.ExpiredSignatureError):
         Token.validate_token(token)
