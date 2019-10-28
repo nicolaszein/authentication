@@ -13,7 +13,7 @@ def _build_user(**kwargs):
     user.password = kwargs.get('password', 'a-secret')
     user.reset_password_token = kwargs.get('reset_password_token', uuid.uuid4())
     user.reset_password_token_created_at = kwargs.get('reset_password_token_created_at', now)
-    user.is_active = kwargs.get('is_active', False)
+    user.is_active = kwargs.get('is_active', True)
     user.activation_token = kwargs.get('activation_token', uuid.uuid4())
     user.activation_token_created_at = kwargs.get('activation_token_created_at', now)
     user.save(force_insert=True)

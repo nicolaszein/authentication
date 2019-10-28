@@ -3,7 +3,7 @@ from peewee import DoesNotExist
 from unittest.mock import patch
 from authentication.models.user import User
 from authentication.handlers.sign_in import SignIn
-from authentication.exceptions import InvalidCredentialsError
+from authentication.exceptions import InvalidCredentialsError, UserNotActivatedError
 
 
 @patch('authentication.handlers.sign_in.Session.save')
@@ -15,7 +15,7 @@ def test_sign_in_success(
             token_service_mock, auth_service_mock,
             get_mock, user_dto_mock, session_save_mock
         ):
-    user = User(email='foo.bar@email.com', password='a-secret')
+    user = User(email='foo.bar@email.com', password='a-secret', is_active=True)
     get_mock.return_value = user
     auth_service_mock.validate_password.return_value = True
     user_dto_mock.from_user_model.return_value = 'user_dto'
@@ -45,7 +45,7 @@ def test_sign_in_with_unknown_token(get_mock):
 @patch('authentication.handlers.sign_in.User.get')
 @patch('authentication.handlers.sign_in.AuthenticationService')
 def test_sign_in_with_wrong_password(auth_service_mock, get_mock):
-    user = User(email='foo.bar@email.com', password='a-secret')
+    user = User(email='foo.bar@email.com', password='a-secret', is_active=True)
     get_mock.return_value = user
     auth_service_mock.validate_password.return_value = False
 
@@ -53,4 +53,16 @@ def test_sign_in_with_wrong_password(auth_service_mock, get_mock):
         SignIn().execute(
             email='foo.bar@email.com',
             password='wrong_password'
+        )
+
+
+@patch('authentication.handlers.sign_in.User.get')
+def test_sign_in_user_not_activated(get_mock):
+    user = User(email='foo.bar@email.com', password='a-secret', is_active=False)
+    get_mock.return_value = user
+
+    with pytest.raises(UserNotActivatedError):
+        SignIn().execute(
+            email='foo.bar@email.com',
+            password='a-secret'
         )

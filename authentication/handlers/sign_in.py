@@ -1,6 +1,6 @@
 from peewee import DoesNotExist
 from authentication.settings import TOKEN_EXPIRATION_TIME
-from authentication.exceptions import InvalidCredentialsError
+from authentication.exceptions import InvalidCredentialsError, UserNotActivatedError
 from authentication.handlers._shared.base_handler import BaseHandler
 from authentication.services.authentication import Authentication as AuthenticationService
 from authentication.services.token import Token as TokenService
@@ -21,6 +21,9 @@ class SignIn(BaseHandler):
             user = User.get(User.email == email)
         except DoesNotExist:
             raise InvalidCredentialsError(f'User with email {email} does not exist!')
+
+        if not user.is_active:
+            raise UserNotActivatedError(f'User with email {email} not activated')
 
         if not self.__valid_password(user, password):
             raise InvalidCredentialsError(f'Wrong password for {email}')
