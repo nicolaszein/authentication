@@ -6,18 +6,18 @@ from authentication.settings import JWT_SECRET_TOKEN, TOKEN_EXPIRATION_TIME
 class Token:
 
     @classmethod
-    def generate_token(cls, user, expire_in=TOKEN_EXPIRATION_TIME):
+    def generate_token(cls, token_data, expire_in=TOKEN_EXPIRATION_TIME):
         claims_data = cls.__build_claims_data(expire_in)
-        data = {**claims_data, **user.to_dict()}
+        data = {**claims_data, **token_data.to_dict()}
 
         token = cls.__build_token(data)
 
         return token.decode()
 
     @classmethod
-    def generate_refresh_token(cls, user):
+    def generate_refresh_token(cls, token_data):
         claims_data = cls.__build_claims_data()
-        data = {**claims_data, **user.to_dict()}
+        data = {**claims_data, **token_data.to_dict()}
 
         token = cls.__build_token(data)
 

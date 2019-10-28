@@ -4,7 +4,7 @@ from authentication.exceptions import InvalidCredentialsError
 from authentication.handlers._shared.base_handler import BaseHandler
 from authentication.services.token import Token as TokenService
 from authentication.models.session import Session
-from authentication.dtos.user import User as UserDto
+from authentication.dtos.token_data import TokenData
 from authentication.dtos.sign_in import SignIn as SignInDto
 
 
@@ -19,8 +19,13 @@ class RefreshToken(BaseHandler):
         except DoesNotExist:
             raise InvalidCredentialsError(f'Invalid refresh_token')
 
-        user_dto = UserDto.from_user_model(user=session.user)
-        token = self.__token_service.generate_token(user=user_dto)
+        token_data = TokenData(
+            id=session.user.id,
+            full_name=session.user.full_name,
+            email=session.user.email,
+            session_id=session.id
+        )
+        token = self.__token_service.generate_token(token_data=token_data)
 
         return SignInDto(
             access_token=token,
