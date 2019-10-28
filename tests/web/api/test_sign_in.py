@@ -65,6 +65,26 @@ def test_sign_in_with_wrong_password(client):
     assert response.json['errors'] == 'Invalid Credentials'
 
 
+def test_sign_in_with_user_not_activated(client):
+    UserFactory.create_with_hashed_password(
+        email='foo.bar@email.com',
+        password='a-big-secret',
+        is_active=False
+    )
+    payload = {
+        'email': 'foo.bar@email.com',
+        'password': 'a-big-secret'
+    }
+
+    response = client.post(
+        '/api/sign-in',
+        json=payload
+    )
+
+    assert response.status_code == 401
+    assert response.json['errors'] == 'Not activated'
+
+
 def test_sign_in_ok(client):
     UserFactory.create_with_hashed_password(
         email='foo.bar@email.com',
