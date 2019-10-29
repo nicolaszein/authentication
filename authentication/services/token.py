@@ -25,7 +25,7 @@ class Token:
 
     @staticmethod
     def validate_token(token):
-        jwt.decode(token, JWT_SECRET_TOKEN, algorithms=['HS256'])
+        return jwt.decode(token, JWT_SECRET_TOKEN, algorithms=['HS256'])
 
     @classmethod
     def __build_claims_data(cls, expire_in=None):
