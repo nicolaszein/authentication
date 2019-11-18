@@ -36,3 +36,8 @@ class User(BaseModel):
     def generate_reset_password_token(self):
         self.reset_password_token = secrets.token_urlsafe(16)
         self.reset_password_token_created_at = datetime.datetime.now()
+
+    def reset_password(self, password):
+        self.reset_password_token = None
+        self.reset_password_token_created_at = None
+        self.password = password

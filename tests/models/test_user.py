@@ -69,3 +69,14 @@ def test_generate_reset_password_token(secrets_mock):
 
     assert user.reset_password_token == 'reset_token'
     assert user.reset_password_token_created_at
+
+
+def test_reset_password():
+    user = User()
+    user.generate_reset_password_token()
+
+    user.reset_password(password='a-new-secret')
+
+    assert not user.reset_password_token
+    assert not user.reset_password_token_created_at
+    assert user.password == 'a-new-secret'
