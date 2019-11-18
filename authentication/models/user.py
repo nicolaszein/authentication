@@ -32,3 +32,7 @@ class User(BaseModel):
         self.is_active = True
         self.activation_token = None
         self.activation_token_created_at = None
+
+    def generate_reset_password_token(self):
+        self.reset_password_token = secrets.token_urlsafe(16)
+        self.reset_password_token_created_at = datetime.datetime.now()

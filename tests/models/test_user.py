@@ -58,3 +58,14 @@ def test_activate_expired():
 
     with pytest.raises(ActivationExpiredError):
         user.activate()
+
+
+@patch('authentication.models.user.secrets')
+def test_generate_reset_password_token(secrets_mock):
+    secrets_mock.token_urlsafe.return_value = 'reset_token'
+    user = User(reset_password_token=None, reset_password_token_created_at=None)
+
+    user.generate_reset_password_token()
+
+    assert user.reset_password_token == 'reset_token'
+    assert user.reset_password_token_created_at
