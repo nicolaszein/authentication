@@ -6,7 +6,7 @@ COMMAND="$1"
 
 case "$COMMAND" in
   web)
-    python runserver.py
+    exec python runserver.py
     ;;
   test)
     python -m pytest ${*:2}
