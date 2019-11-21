@@ -11,3 +11,4 @@ marshmallow==3.2.1
 PyJWT==1.7.1
 freezegun==0.3.12
 autodiscover==0.0.3
+sendgrid==6.1.0
