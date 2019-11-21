@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <title>Authentication - {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('auth_app.static', filename='css/style.css')}}">
+
+    {% block extra_js %}{% endblock %}
+  </head>
+
+  <body>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
