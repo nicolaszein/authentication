@@ -1,8 +1,10 @@
 import peewee
 import datetime
 import secrets
+from playhouse.signals import post_save
 from authentication.exceptions import ActivationExpiredError
 from authentication.models._shared import BaseModel
+from authentication.handlers.send_activation_email import SendActivationEmail
 
 ACTIVATION_EXPIRE_TIME = 7200
 
@@ -41,3 +43,11 @@ class User(BaseModel):
         self.reset_password_token = None
         self.reset_password_token_created_at = None
         self.password = password
+
+
+@post_save(sender=User)
+def send_activation_email(sender, instance, created):
+    if not created:
+        return None
+
+    SendActivationEmail().execute(user=instance)
