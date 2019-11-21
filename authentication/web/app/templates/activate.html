@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar E-mail{% endblock %}
+
+{% block extra_js %}
+  <script src="{{url_for('auth_app.static', filename='js/activate.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+  <h1>Confirmar E-mail</h1>
+
+  <div class="wrapper">
+    <div class="content-action">
+      <div id="loading">
+        <i class="fa fa-spinner fa-spin"></i>
+      </div>
+
+      <div id="error-content">
+        <p>Oops! Houve um erro, tente novamente mais tarde! :(</p>
+      </div>
+
+      <div id="success-content">
+        <p>E-mail confirmado com sucesso! :)</p>
+        <div class="success-check">
+          <i class="fa fa-check"></i>
+        </div>
+      </div>
+
+      <div id="initial-content">
+        <p>
+          Clique no botão abaixo para confirmar seu e-mail!
+        </p>
+
+        <a id="call-to-action" href="javascript:void(0);" class="btn">
+          Confirmar
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -3,6 +3,7 @@ from peewee import DoesNotExist
 
 from authentication.web.healthcheck import app as healthcheck_app
 from authentication.web.api import app as api_app
+from authentication.web.app.routes import app as auth_app
 from authentication.db import DATABASE
 
 from authentication.models.user import User
@@ -36,6 +37,7 @@ class App:
     def __register_blueprints(self):
         self._app.register_blueprint(healthcheck_app)
         self._app.register_blueprint(api_app)
+        self._app.register_blueprint(auth_app)
 
     def __create_tables(self):
         DATABASE.connect(reuse_if_open=True)
