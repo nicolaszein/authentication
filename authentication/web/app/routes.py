@@ -11,3 +11,8 @@ app = Blueprint(
 @app.route('/activate')
 def activate():
     return render_template('activate.html')
+
+
+@app.route('/reset-password')
+def reset_password():
+    return render_template('reset_password.html')

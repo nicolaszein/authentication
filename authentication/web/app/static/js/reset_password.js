@@ -1,25 +1,38 @@
 document.addEventListener('DOMContentLoaded', function() {
   const urlParams = new URLSearchParams(window.location.search);
-  const activationToken = urlParams.get('activation_token');
-  const cta = document.getElementById("call-to-action");
+  const token = urlParams.get('token');
+  const resetPasswordForm = document.getElementById("reset-password-form");
+  const confirmationPasswordError = document.getElementById("error-password-confirmation");
   const loading = document.getElementById("loading");
   const initialContent = document.getElementById("initial-content");
   const errorContent = document.getElementById("error-content");
   const successContent = document.getElementById("success-content");
 
-  cta.addEventListener("click", function(){
+  resetPasswordForm.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const password = document.getElementsByName("password")[0].value;
+    const confirmationPassword = document.getElementsByName("confirmation_password")[0].value;
+
+    if(password !== confirmationPassword) {
+      toggleElement(confirmationPasswordError);
+
+      return false;
+    };
+
     toggleElements([initialContent, loading]);
     hideElement(errorContent);
+    hideElement(confirmationPasswordError);
 
     fetch(
-      `${window.location.origin}/api/users/activate`,
+      `${window.location.origin}/api/reset-password/${token}`,
       {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          activation_token: activationToken
+          password: password
         })
       }
     ).then(

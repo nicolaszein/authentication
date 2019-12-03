@@ -54,7 +54,7 @@ body {
   padding: 12px 45px;
 }
 
-#error-content {
+#error-content, #error-password-confirmation {
   display: none;
   color: red;
   font-size: 20px;
@@ -78,4 +78,41 @@ body {
 #loading {
   font-size: 30px;
   display: none;
+}
+
+.form-field {
+  overflow: auto;
+  margin-bottom: 15px;
+}
+
+.form-field label {
+  width: 30%;
+  line-height: 45px;
+  text-align: right;
+  display: inline-block;
+}
+
+.form-field input {
+  width: 50%;
+  padding: .75rem;
+  border: .0625em solid #ddd;
+  border-radius: .125em;
+  display: inline-block;
+}
+
+form button[type=submit] {
+  width: 40%;
+  margin-top: 10px;
+  height: 40px;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+  background-color: #348eda;
+  border: none;
+  border-radius: 2px;
+}
+
+form button[type=submit]:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
