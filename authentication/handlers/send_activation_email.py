@@ -1,3 +1,4 @@
+from authentication.settings import APP_HOST
 from authentication.handlers._shared.base_handler import BaseHandler
 from authentication.services.sendgrid import Sendgrid as SendgridService
 
@@ -18,7 +19,7 @@ class SendActivationEmail(BaseHandler):
         return (
             f'<p>Olá, <strong>{user.full_name}</strong></p>'
             '<p>Para continuar acesse o link'
-            f' https://auth.nicolaszein.dev/auth/activate?activation_token={user.activation_token}'
+            f' {APP_HOST}/auth/activate?activation_token={user.activation_token}'
             ' e confirme seu e-mail!</p>'
             '<p>Abraços,</p>'
         )
