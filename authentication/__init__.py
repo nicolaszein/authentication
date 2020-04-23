@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from peewee import DoesNotExist
+from jwt.exceptions import ExpiredSignatureError
 
 from authentication.web.healthcheck import app as healthcheck_app
 from authentication.web.api import app as api_app
@@ -58,6 +59,10 @@ class App:
         @app.errorhandler(InvalidCredentialsError)
         def invalid_credentials(e):
             return jsonify(errors='Invalid Credentials'), 401
+
+        @app.errorhandler(ExpiredSignatureError)
+        def token_expired(e):
+            return jsonify(errors='Invalid token'), 401
 
     def __register_hooks(self, app):
         @app.before_request
