@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from peewee import DoesNotExist
 
 from authentication.web.healthcheck import app as healthcheck_app
@@ -22,6 +23,7 @@ class App:
             return None
 
         app = Flask(__name__)
+        CORS(app)
         self._app = app
         self.__register_blueprints()
         self.__create_tables()
